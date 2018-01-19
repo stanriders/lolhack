@@ -12,24 +12,28 @@
 #include <ienginetrace.h>
 #include <materialsystem/imaterialsystem.h>
 #include <vgui/isurface.h>
+#include <vgui/ipanel.h>
+
+#include "settings.h"
 
 //engine
-extern IBaseClientDLL *client;
-extern IVEngineServer *engine;
-extern IVEngineClient *engineClient;
-extern IEngineTrace *traces;
-extern IClientEntityList *entityList;
+extern IBaseClientDLL *g_client;
+extern IVEngineServer *g_engine;
+extern IVEngineClient *g_engineClient;
+extern IEngineTrace *g_traces;
+extern IClientEntityList *g_entityList;
 
 //models
-extern IVModelInfo *vmodelInfo;
-extern IVModelRender *modelRender;
+extern IVModelInfo *g_vmodelInfo;
+extern IVModelRender *g_modelRender;
 
 //materials
-extern IMaterialSystem *matSystem;
+extern IMaterialSystem *g_matSystem;
 
 //vgui
 using namespace vgui;
-extern ISurface *vguiSurface;
+extern ISurface *g_vguiSurface;
+extern IPanel *g_vguiPanel;
 
 class Interfaces
 {

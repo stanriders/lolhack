@@ -24,7 +24,7 @@ bool CanSeePlayer(IClientEntity* player)
 	Vector end = player->GetAbsOrigin();
 
 	ray.Init(start, end);
-	traces->TraceRay(ray, MASK_SHOT | CONTENTS_GRATE, &filter, &tr);
+	g_traces->TraceRay(ray, MASK_SHOT | CONTENTS_GRATE, &filter, &tr);
 
 	return tr.DidHit();
 }
@@ -87,7 +87,7 @@ DWORD_PTR GetNetVar(const std::string& Data, const std::string& Name)
 {
 	DWORD_PTR dwRet = NULL;
 
-	for (auto pList = client->GetAllClasses(); pList; pList = pList->m_pNext)
+	for (auto pList = g_client->GetAllClasses(); pList; pList = pList->m_pNext)
 	{
 		RecvTable* Table = pList->m_pRecvTable;
 
@@ -107,7 +107,7 @@ DWORD_PTR GetNetVar(const std::string& Data, const std::string& Name)
 
 IClientEntity *GetLocalPlayer()
 {
-	return entityList->GetClientEntity(engineClient->GetLocalPlayer());
+	return g_entityList->GetClientEntity(g_engineClient->GetLocalPlayer());
 }
 
 void NormalizeAngles(QAngle& angle)
@@ -163,4 +163,41 @@ QAngle CalcAngle(Vector src, Vector dst)
 	VectorAngles(delta, angles);
 
 	return angles;
+}
+
+//--------------------------------------------------------------------------------
+static bool screen_transform(const Vector& in, Vector& out)
+{
+	static auto& w2sMatrix = g_engineClient->WorldToScreenMatrix();
+
+	out.x = w2sMatrix.m[0][0] * in.x + w2sMatrix.m[0][1] * in.y + w2sMatrix.m[0][2] * in.z + w2sMatrix.m[0][3];
+	out.y = w2sMatrix.m[1][0] * in.x + w2sMatrix.m[1][1] * in.y + w2sMatrix.m[1][2] * in.z + w2sMatrix.m[1][3];
+	out.z = 0.0f;
+
+	float w = w2sMatrix.m[3][0] * in.x + w2sMatrix.m[3][1] * in.y + w2sMatrix.m[3][2] * in.z + w2sMatrix.m[3][3];
+
+	if (w < 0.001f) {
+		out.x *= 100000;
+		out.y *= 100000;
+		return false;
+	}
+
+	out.x /= w;
+	out.y /= w;
+
+	return true;
+}
+//--------------------------------------------------------------------------------
+bool WorldToScreen(const Vector& in, Vector& out)
+{
+	if (screen_transform(in, out)) {
+		int w, h;
+		g_engineClient->GetScreenSize(w, h);
+
+		out.x = (w / 2.0f) + (out.x * w) / 2.0f;
+		out.y = (h / 2.0f) - (out.y * h) / 2.0f;
+
+		return true;
+	}
+	return false;
 }

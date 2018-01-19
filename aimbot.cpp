@@ -20,19 +20,22 @@ int Aimbot::GetPlayerTeam(IClientEntity *player)
 
 void Aimbot::Run()
 {
+	if (!g_AimbotEnabled)
+		return;
+
 	IClientEntity *localplayer = GetLocalPlayer();
 	if (!localplayer)
 		return;
 
 	Vector localOrigin = localplayer->GetAbsOrigin();
 	QAngle viewAngles;
-	engineClient->GetViewAngles(viewAngles);
+	g_engineClient->GetViewAngles(viewAngles);
 
 	int shortestDelta = 999999;
 	static IClientEntity *currentTarget;
-	for (int i = 1; i < engineClient->GetMaxClients(); ++i)
+	for (int i = 1; i < g_engineClient->GetMaxClients(); ++i)
 	{
-		IClientEntity* player = entityList->GetClientEntity(i);
+		IClientEntity* player = g_entityList->GetClientEntity(i);
 
 		if (!player
 			|| player == localplayer
@@ -74,7 +77,7 @@ void Aimbot::Run()
 		int delta = localOrigin.DistTo(targetVec);
 
 		if (delta < 1024 && GetFov(viewAngles, finalAngle) < 50)
-			engineClient->SetViewAngles(finalAngle);
+			g_engineClient->SetViewAngles(finalAngle);
 
 	}
 }

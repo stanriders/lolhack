@@ -8,11 +8,9 @@ public:
 	Wallhack();
 	~Wallhack();
 
-	void Run();
+	void Run(IMaterial *origMaterial, bool post);
 
 private:
-	IMaterial* materialRegular = nullptr;
-	IMaterial* materialRegularIgnoreZ = nullptr;
 	IMaterial* materialFlatIgnoreZ = nullptr;
 	IMaterial* materialFlat = nullptr;
 };

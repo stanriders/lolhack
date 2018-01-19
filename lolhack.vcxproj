@@ -127,7 +127,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "C:\Projects\lolhack\Release\EVGAPrecision.dll" "C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\EVGAPrecision.dll" /s/y</Command>
+      <Command>xcopy "C:\Projects\lolhack-dev\Release\EVGAPrecision.dll" "C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\EVGAPrecision.dll" /s/y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,9 +150,11 @@
   <ItemGroup>
     <ClInclude Include="aimbot.h" />
     <ClInclude Include="findpattern.h" />
+    <ClInclude Include="hooks.h" />
     <ClInclude Include="interfaces.h" />
     <ClInclude Include="lolhack.h" />
     <ClInclude Include="netvars.h" />
+    <ClInclude Include="settings.h" />
     <ClInclude Include="sourcehook\FastDelegate.h" />
     <ClInclude Include="sourcehook\sh_list.h" />
     <ClInclude Include="sourcehook\sh_memfuncinfo.h" />
@@ -176,13 +178,16 @@
     <ClInclude Include="sourcehook\sourcehook_pibuilder.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="visuals.h" />
     <ClInclude Include="wallhack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aimbot.cpp" />
+    <ClCompile Include="hooks.cpp" />
     <ClCompile Include="interfaces.cpp" />
     <ClCompile Include="lolhack.cpp" />
     <ClCompile Include="netvars.cpp" />
+    <ClCompile Include="settings.cpp" />
     <ClCompile Include="sourcehook\sourcehook.cpp" />
     <ClCompile Include="sourcehook\sourcehook_hookmangen.cpp" />
     <ClCompile Include="sourcehook\sourcehook_impl_chookidman.cpp" />
@@ -190,6 +195,7 @@
     <ClCompile Include="sourcehook\sourcehook_impl_cproto.cpp" />
     <ClCompile Include="sourcehook\sourcehook_impl_cvfnptr.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="visuals.cpp" />
     <ClCompile Include="wallhack.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

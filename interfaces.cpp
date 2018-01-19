@@ -1,49 +1,52 @@
 #include "interfaces.h"
 
-IBaseClientDLL *client = NULL;
-IVEngineServer *engine = NULL;
-IVEngineClient *engineClient = NULL;
-IEngineTrace *traces = NULL;
+IBaseClientDLL *g_client = NULL;
+IVEngineServer *g_engine = NULL;
+IVEngineClient *g_engineClient = NULL;
+IEngineTrace *g_traces = NULL;
 
-IClientEntityList *entityList = NULL;
+IClientEntityList *g_entityList = NULL;
 
-IVModelInfo *vmodelInfo = NULL;
-IVModelRender *modelRender = NULL;
+IVModelInfo *g_vmodelInfo = NULL;
+IVModelRender *g_modelRender = NULL;
 
-IMaterialSystem *matSystem = NULL;
+IMaterialSystem *g_matSystem = NULL;
 
-ISurface *vguiSurface = NULL;
+ISurface *g_vguiSurface = NULL;
+IPanel *g_vguiPanel = NULL;
 
 bool Interfaces::Init()
 {
 	CreateInterfaceFn EngineFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandle("engine.dll"), "CreateInterface");
 	CreateInterfaceFn ClientFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandle("client.dll"), "CreateInterface");
 	CreateInterfaceFn MatsysFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandle("materialsystem.dll"), "CreateInterface");
+	CreateInterfaceFn VguiSurfaceFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandle("vguimatsurface.dll"), "CreateInterface");
 	CreateInterfaceFn VguiFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandle("vgui2.dll"), "CreateInterface");
 
-	engine = (IVEngineServer *)((EngineFactory)(INTERFACEVERSION_VENGINESERVER, NULL));
-	engineClient = (IVEngineClient *)((EngineFactory)("VEngineClient014", NULL)); // ssdk versions are outdated
-	if (!engine || !engineClient)
+	g_engine = (IVEngineServer *)((EngineFactory)(INTERFACEVERSION_VENGINESERVER, NULL));
+	g_engineClient = (IVEngineClient *)((EngineFactory)("VEngineClient014", NULL)); // ssdk versions are outdated
+	if (!g_engine || !g_engineClient)
 	{
 		return false;
 	}
 
-	client = (IBaseClientDLL *)((ClientFactory)("VClient018", NULL)); // ssdk versions are outdated
-	if (!client)
+	g_client = (IBaseClientDLL *)((ClientFactory)("VClient018", NULL)); // ssdk versions are outdated
+	if (!g_client)
 	{
 		return false;
 	}
 
-	entityList = (IClientEntityList *)((ClientFactory)(VCLIENTENTITYLIST_INTERFACE_VERSION, NULL));
-	vmodelInfo = (IVModelInfo *)((ClientFactory)(VMODELINFO_CLIENT_INTERFACE_VERSION, NULL));
+	g_entityList = (IClientEntityList *)((ClientFactory)(VCLIENTENTITYLIST_INTERFACE_VERSION, NULL));
+	g_vmodelInfo = (IVModelInfo *)((ClientFactory)(VMODELINFO_CLIENT_INTERFACE_VERSION, NULL));
 
-	modelRender = (IVModelRender *)((EngineFactory)(VENGINE_HUDMODEL_INTERFACE_VERSION, NULL));
+	g_modelRender = (IVModelRender *)((EngineFactory)(VENGINE_HUDMODEL_INTERFACE_VERSION, NULL));
 
-	traces = (IEngineTrace *)((EngineFactory)(INTERFACEVERSION_ENGINETRACE_CLIENT, NULL));
+	g_traces = (IEngineTrace *)((EngineFactory)(INTERFACEVERSION_ENGINETRACE_CLIENT, NULL));
 
-	matSystem = (IMaterialSystem *)((MatsysFactory)("VMaterialSystem080", NULL));
+	g_matSystem = (IMaterialSystem *)((MatsysFactory)("VMaterialSystem080", NULL));
 
-	vguiSurface = (ISurface *)((VguiFactory)("VGUI_Surface031", NULL));
+	g_vguiPanel = (IPanel *)((VguiFactory)("VGUI_Panel009", NULL));
+	g_vguiSurface = (ISurface *)((VguiSurfaceFactory)("VGUI_Surface031", NULL));
 
 	return true;
 }

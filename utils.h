@@ -21,3 +21,6 @@ float GetFov(const QAngle& viewAngle, const QAngle& aimAngle);
 void VectorAngles(const Vector& forward, QAngle &angles);
 
 QAngle CalcAngle(Vector src, Vector dst);
+
+static bool screen_transform(const Vector& in, Vector& out);
+bool WorldToScreen(const Vector& in, Vector& out);
